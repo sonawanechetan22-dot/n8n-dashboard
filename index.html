@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My n8n Workflows</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 420px;
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    #status {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      cursor: pointer;
+      background: #222;
+      color: white;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>My Workflows</h1>
+
+  <div id="status">Checking server...</div>
+
+  <button onclick="openWorkflow('student')">
+    🎓 Student Information
+  </button>
+
+  <button onclick="openWorkflow('admin')">
+    👤 Admin
+  </button>
+
+  <button onclick="openWorkflow('receipt')">
+    🧾 Receipt Scanner
+  </button>
+
+  <button onclick="openWorkflow('home')">
+    🏠 Home Network
+  </button>
+
+</div>
+
+<script>
+
+const workflows = {
+
+  student:
+    "/webhook/d41cbcf2-1ce5-4352-8c45-994a4d0115e0/chat",
+
+  admin:
+    "/form/c49eb190-6537-4a08-8f8e-bcfa4104862b",
+
+  receipt:
+    "/form/39d4415c-35f1-42d1-abd3-c2d5b87189d4",
+
+  home:
+    "/webhook/adf3f59e-0ce7-469c-a9f3-6125d7ff6f23/chat"
+};
+
+
+let BASE_URL = "";
+
+
+/* Get latest Cloudflare URL */
+
+async function loadCloudflareURL() {
+
+  try {
+
+    const response = await fetch(
+      "cloudflare-url.txt?t=" + Date.now()
+    );
+
+    if (!response.ok) {
+      throw new Error("URL file not found");
+    }
+
+    BASE_URL = (await response.text()).trim();
+
+    if (!BASE_URL.startsWith("https://")) {
+      throw new Error("Invalid Cloudflare URL");
+    }
+
+    document.getElementById("status").innerHTML =
+      "🟢 Server Online";
+
+  }
+
+  catch (error) {
+
+    document.getElementById("status").innerHTML =
+      "🔴 Server URL Not Available";
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* Open selected workflow */
+
+async function openWorkflow(name) {
+
+  if (!BASE_URL) {
+
+    await loadCloudflareURL();
+
+  }
+
+  if (!BASE_URL) {
+
+    alert(
+      "Cloudflare server URL is not available."
+    );
+
+    return;
+
+  }
+
+  const finalURL =
+    BASE_URL + workflows[name];
+
+  window.location.href =
+    finalURL;
+
+}
+
+
+/* Load URL when page starts */
+
+loadCloudflareURL();
+
+
+/* Check for new Cloudflare URL every 30 seconds */
+
+setInterval(
+  loadCloudflareURL,
+  30000
+);
+
+</script>
+
+</body>
+</html>
