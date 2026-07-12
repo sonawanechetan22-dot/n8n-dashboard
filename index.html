@@ -6,9 +6,7 @@
   <title>My n8n Workflows</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -65,7 +63,7 @@
 
   <h1>My Workflows</h1>
 
-  <div id="status">Checking server...</div>
+  <div id="status">🟢 Public Server</div>
 
   <button onclick="openWorkflow('student')">
     🎓 Student Information
@@ -87,102 +85,18 @@
 
 <script>
 
+const BASE_URL = "https://localhost-0.tail42ff1b.ts.net";
+
 const workflows = {
-
-  student:
-    "/webhook/d41cbcf2-1ce5-4352-8c45-994a4d0115e0/chat",
-
-  admin:
-    "/form/c49eb190-6537-4a08-8f8e-bcfa4104862b",
-
-  receipt:
-    "/form/39d4415c-35f1-42d1-abd3-c2d5b87189d4",
-
-  home:
-    "/webhook/adf3f59e-0ce7-469c-a9f3-6125d7ff6f23/chat"
+  student: "/webhook/d41cbcf2-1ce5-4352-8c45-994a4d0115e0/chat",
+  admin: "/form/c49eb190-6537-4a08-8f8e-bcfa4104862b",
+  receipt: "/form/39d4415c-35f1-42d1-abd3-c2d5b87189d4",
+  home: "/webhook/adf3f59e-0ce7-469c-a9f3-6125d7ff6f23/chat"
 };
 
-
-let BASE_URL = "";
-
-
-/* Get latest Cloudflare URL */
-
-async function loadCloudflareURL() {
-
-  try {
-
-    const response = await fetch(
-      "cloudflare-url.txt?t=" + Date.now()
-    );
-
-    if (!response.ok) {
-      throw new Error("URL file not found");
-    }
-
-    BASE_URL = (await response.text()).trim();
-
-    if (!BASE_URL.startsWith("https://")) {
-      throw new Error("Invalid Cloudflare URL");
-    }
-
-    document.getElementById("status").innerHTML =
-      "🟢 Server Online";
-
-  }
-
-  catch (error) {
-
-    document.getElementById("status").innerHTML =
-      "🔴 Server URL Not Available";
-
-    console.error(error);
-
-  }
-
+function openWorkflow(name) {
+  window.location.href = BASE_URL + workflows[name];
 }
-
-
-/* Open selected workflow */
-
-async function openWorkflow(name) {
-
-  if (!BASE_URL) {
-
-    await loadCloudflareURL();
-
-  }
-
-  if (!BASE_URL) {
-
-    alert(
-      "Cloudflare server URL is not available."
-    );
-
-    return;
-
-  }
-
-  const finalURL =
-    BASE_URL + workflows[name];
-
-  window.location.href =
-    finalURL;
-
-}
-
-
-/* Load URL when page starts */
-
-loadCloudflareURL();
-
-
-/* Check for new Cloudflare URL every 30 seconds */
-
-setInterval(
-  loadCloudflareURL,
-  30000
-);
 
 </script>
 
