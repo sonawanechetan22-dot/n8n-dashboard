@@ -1,104 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My n8n Workflows</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * { box-sizing: border-box; }
+<title>n8n Workflow Hub</title>
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    .container {
-      width: 90%;
-      max-width: 420px;
-      background: white;
-      padding: 25px;
-      border-radius: 18px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-    }
+body {
+  margin:0;
+  min-height:100vh;
+  font-family:"Segoe UI", Arial, sans-serif;
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
 
-    h1 {
-      text-align: center;
-      margin-top: 0;
-    }
+.container {
+  width:92%;
+  max-width:430px;
+  background:#ffffff;
+  border-radius:25px;
+  padding:25px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.25);
+}
 
-    #status {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #666;
-      font-size: 14px;
-    }
+.header {
+  text-align:center;
+  margin-bottom:25px;
+}
 
-    button {
-      width: 100%;
-      padding: 16px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 12px;
-      font-size: 17px;
-      cursor: pointer;
-      background: #222;
-      color: white;
-    }
+.header h1 {
+  margin:0;
+  font-size:28px;
+  color:#222;
+}
 
-    button:active {
-      transform: scale(0.98);
-    }
-  </style>
+.header p {
+  color:#777;
+  margin-top:8px;
+}
+
+.status {
+  background:#e8fff0;
+  color:#159447;
+  padding:10px;
+  border-radius:12px;
+  text-align:center;
+  font-size:14px;
+  margin-bottom:20px;
+}
+
+.grid {
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+button {
+
+  border:none;
+  width:100%;
+  padding:18px;
+  border-radius:16px;
+  font-size:17px;
+  font-weight:600;
+  cursor:pointer;
+  color:white;
+
+  display:flex;
+  align-items:center;
+  gap:15px;
+
+  box-shadow:0 6px 15px rgba(0,0,0,0.15);
+  transition:0.2s;
+}
+
+
+button:hover {
+  transform:translateY(-3px);
+}
+
+button:active {
+  transform:scale(0.97);
+}
+
+
+.student {
+ background:#2563eb;
+}
+
+.notes {
+ background:#16a34a;
+}
+
+.admin {
+ background:#7c3aed;
+}
+
+.receipt {
+ background:#ea580c;
+}
+
+.home {
+ background:#0891b2;
+}
+
+
+.icon {
+ font-size:28px;
+}
+
+.footer {
+ text-align:center;
+ margin-top:25px;
+ color:#999;
+ font-size:13px;
+}
+
+</style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-  <h1>My Workflows</h1>
+<div class="header">
+<h1>⚡ Workflow Hub</h1>
+<p>n8n Automation Dashboard</p>
+</div>
 
-  <div id="status">🟢 Public Server</div>
 
-  <button onclick="openWorkflow('student')">
-    🎓 Student Information
-  </button>
+<div class="status">
+🟢 Public Server Connected
+</div>
 
-  <button onclick="openWorkflow('admin')">
-    👤 Admin
-  </button>
 
-  <button onclick="openWorkflow('receipt')">
-    🧾 Receipt Scanner
-  </button>
+<div class="grid">
 
-  <button onclick="openWorkflow('home')">
-    🏠 Home Network
-  </button>
+
+<button class="student" onclick="openWorkflow('student')">
+<span class="icon">🎓</span>
+Student Information
+</button>
+
+
+<button class="notes" onclick="openWorkflow('notes')">
+<span class="icon">📚</span>
+Students Notes
+</button>
+
+
+<button class="admin" onclick="openWorkflow('admin')">
+<span class="icon">👤</span>
+Admin Panel
+</button>
+
+
+<button class="receipt" onclick="openWorkflow('receipt')">
+<span class="icon">🧾</span>
+Receipt Scanner
+</button>
+
+
+<button class="home" onclick="openWorkflow('home')">
+<span class="icon">🏠</span>
+Home Network
+</button>
+
 
 </div>
 
+
+<div class="footer">
+Powered by n8n Automation
+</div>
+
+
+</div>
+
+
+
 <script>
+
 
 const BASE_URL = "https://localhost-0.tail42ff1b.ts.net";
 
+
 const workflows = {
-  student: "/webhook/d41cbcf2-1ce5-4352-8c45-994a4d0115e0/chat",
-  admin: "/form/c49eb190-6537-4a08-8f8e-bcfa4104862b",
-  receipt: "/form/39d4415c-35f1-42d1-abd3-c2d5b87189d4",
-  home: "/webhook/adf3f59e-0ce7-469c-a9f3-6125d7ff6f23/chat"
+
+student:
+"/webhook/d41cbcf2-1ce5-4352-8c45-994a4d0115e0/chat",
+
+notes:
+"/form/c1a62a3a-d693-4394-a5cc-e8f036cd186f",
+
+admin:
+"/form/c49eb190-6537-4a08-8f8e-bcfa4104862b",
+
+receipt:
+"/form/39d4415c-35f1-42d1-abd3-c2d5b87189d4",
+
+home:
+"/webhook/adf3f59e-0ce7-469c-a9f3-6125d7ff6f23/chat"
+
 };
 
-function openWorkflow(name) {
-  window.location.href = BASE_URL + workflows[name];
+
+function openWorkflow(name){
+
+window.location.href = BASE_URL + workflows[name];
+
 }
 
+
 </script>
+
 
 </body>
 </html>
